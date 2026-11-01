@@ -1,0 +1,38 @@
+application:
+  subdomain: rssbridge
+  multi_instance: false
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://rssbridge:80/
+
+services:
+  rssbridge:
+    # upstream: rssbridge/rss-bridge:2026-09-30
+    image: docker.1ms.run/rssbridge/rss-bridge:2026-09-30
+    environment:
+      - |-
+        RSSBRIDGE_USER={{ .U.bridge_user | replace "\r" "" | replace "\n" "" }}
+      - |-
+        RSSBRIDGE_PASS={{ .U.bridge_secret | replace "\r" "" | replace "\n" "" }}
+    command: sh /lzcapp/pkg/content/start.sh
+
+usage: |
+  RSS-Bridge 给不提供 RSS 的网站生成订阅源：你在网页里选一个「桥」，填上目标地址，它就输出一条标准 RSS 链接。
+
+  使用方法：
+  1. 打开应用，浏览器会先弹出登录框——输入部署参数里的用户名和密码。
+  2. 在列表里选一个桥（例如某个站点、某个社交平台），按提示填参数，点「Generate feed」。
+  3. 复制得到的链接，粘贴到你的 RSS 阅读器里订阅。
+
+  数据与安全：
+  - 本应用不存储订阅内容，只按请求即时抓取，因此没有需要备份的业务数据。
+  - 服务端会把用户填写的地址当作目标去抓取，等于一个出站抓取器。本包强制开启 HTTP Basic 认证，未登录无法使用，避免被他人当作免费代理。
+  - 账号密码在容器启动时校验并渲染到内存临时目录，不随包发布、不落在任何数据卷。
+  - 应用另外还有懒猫入口鉴权。
+
+  说明：
+  - 用户名只允许字母、数字和 _ . @ -；密码至少 12 位，支持字母数字和 _ . ~ ! @ # % ^ + = -。
+  - 部分桥依赖目标站点的页面结构，站点改版后对应桥可能失效，这属于桥本身的维护问题。
+  - 未做真机验证：登录、各桥生成订阅、阅读器订阅、以及被目标站点限流时的表现均未在设备上实测。

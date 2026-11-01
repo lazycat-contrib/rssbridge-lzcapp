@@ -1,0 +1,21 @@
+params:
+  - id: bridge_user
+    type: string
+    name: Access username
+    description: "Login for the bridge UI. Letters, digits and _ . @ - only."
+    default_value: bridge
+    optional: false
+  - id: bridge_secret
+    type: secret
+    name: Access secret
+    description: "At least 12 characters, letters, digits and _ . ~ ! @ # % ^ + = - only. Rendered into a tmpfs config at container start."
+    default_value: "$random(len=20)"
+    optional: false
+locales:
+  zh:
+    bridge_user:
+      name: 访问用户名
+      description: 登录桥接界面的账号，只能用字母、数字和 _ . @ -。
+    bridge_secret:
+      name: 访问密码
+      description: 至少 12 位，只能用字母、数字和 _ . ~ ! @ # % ^ + = -。容器启动时渲染到内存临时文件，不随包发布。

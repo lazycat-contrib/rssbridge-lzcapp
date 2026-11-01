@@ -1,0 +1,18 @@
+package: community.lazycat.app.rssbridge
+version: 2026.9.30
+name: RSS-Bridge
+description: "Generate RSS feeds for sites that do not provide one."
+min_os_version: "1.5.0"
+homepage: https://github.com/RSS-Bridge/rss-bridge
+author: RSS-Bridge
+license: Unlicense
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: RSS-Bridge
+    description: "给没有 RSS 的网站生成订阅源，支持大量站点桥接规则。"
+  en:
+    name: RSS-Bridge
+    description: "Generate RSS feeds for sites that do not provide one."
